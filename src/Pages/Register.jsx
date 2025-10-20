@@ -1,9 +1,10 @@
 import React, { use } from "react";
 import { Link } from "react-router";
 import { AuthContext } from "../Provider/AuthProvider";
+import { set } from "date-fns";
 
 const Register = () => {
-  const {createUser} = use(AuthContext);
+  const { createUser, setUser, updateUser } = use(AuthContext);
   const handelSignUp = (e) => {
     e.preventDefault();
 
@@ -17,7 +18,16 @@ const Register = () => {
     createUser(email,password)
     .then(result=>{
      const user = result.user;
-     console.log(user)
+    //  console.log(user)
+     
+     updateUser({displayName:name,photoURL:url}).then(()=>{
+      setUser({ ...user, displayName: name, photoURL: url });
+     })
+     .catch(error=>{
+      console.log(error)
+      setUser(user);
+     })
+     
     })
     .catch(error=>{
       console.log(error)
